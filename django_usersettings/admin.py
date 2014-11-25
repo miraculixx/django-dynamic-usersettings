@@ -7,6 +7,10 @@ class ArbitrarySettingInline(admin.TabularInline):
     extra = 3
     
 
+class UserAdmin(admin.ModelAdmin):
+    inlines = [ArbitrarySettingInline,]
+
+
 class ArbitrarySettingAdmin(admin.ModelAdmin):
     list_display=('user', 'key', 'value')
     
