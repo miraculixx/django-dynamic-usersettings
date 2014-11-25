@@ -5,10 +5,11 @@ from libs import UserSettingDescriptor
 
 class UserSettingsConfig(AppConfig):
     name = "django_usersettings"
+    setting_attribute_name = "settings"
     
     def ready(self):
         setattr(get_user_model(),
-                "settings2",
+                UserSettingsConfig.setting_attribute_name,
                 UserSettingDescriptor(),
             )
 
