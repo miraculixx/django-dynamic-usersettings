@@ -2,16 +2,6 @@ from django.db import models
 from django.conf import settings
 
 
-class UserSetting(models.Model):
-    user = models.OneToOneField(
-        settings.AUTH_USER_MODEL,
-        related_name="settings",
-    )
-
-    def __str__(self):
-        return self.user.username
-
-
 class ArbitrarySetting(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     key = models.CharField(max_length=32)
