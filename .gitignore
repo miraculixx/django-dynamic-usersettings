@@ -55,3 +55,4 @@ target/
 
 # project related
 sample/db.sqlite3
+sample/django_usersettings
