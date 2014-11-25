@@ -22,7 +22,7 @@ class SettingGateWay(object):
         try:
             object.__getattribute__(self, k)
         except AttributeError:
-            if k.startswith("as_"):
+            if not k.startswith("_"):
                 asObject, created = ArbitrarySetting.objects.get_or_create(
                     user = self._user,
                     key = k,
