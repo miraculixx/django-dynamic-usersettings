@@ -8,13 +8,14 @@ class ArbitrarySettingInline(admin.TabularInline):
     
 
 class ArbitrarySettingAdmin(admin.ModelAdmin):
-    list_display=('setting', 'key', 'value')
+    list_display=('setting_id', 'key', 'value')
     
 admin.site.register(ArbitrarySetting, ArbitrarySettingAdmin)
 
 
 class UserSettingAdmin(admin.ModelAdmin):
-    inlines = [ArbitrarySettingInline,]
+    pass
+    # inlines = [ArbitrarySettingInline,]
     
 admin.site.register(UserSetting, UserSettingAdmin)
 

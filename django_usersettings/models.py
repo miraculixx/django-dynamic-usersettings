@@ -13,14 +13,14 @@ class UserSetting(models.Model):
 
 
 class ArbitrarySetting(models.Model):
-    setting = models.ForeignKey(UserSetting)
+    setting_id = models.IntegerField()
     key = models.CharField(max_length=32)
     value = models.CharField(max_length=128)
 
     def __str__(self):
-        return "'%s': '%s' for user %s" % (
+        return "'%s': '%s' for setting ID %s" % (
             self.key,
             self.value,
-            self.setting.user.username,
+            self.setting_id,
         )
         
