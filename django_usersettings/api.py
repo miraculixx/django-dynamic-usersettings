@@ -1,10 +1,10 @@
 from tastypie.authorization import DjangoAuthorization
 from tastypie.resources import ModelResource
-from django_usersettings.models import ArbitrarySetting
+from django_usersettings.models import UserSetting
 
 
-class ArbitrarySettingResource(ModelResource):
+class UserSettingResource(ModelResource):
     class Meta:
-        queryset = ArbitrarySetting.objects.all()
+        queryset = UserSetting.objects.all()
         resource_name = 'arbitrary_setting'
         authorization= DjangoAuthorization()

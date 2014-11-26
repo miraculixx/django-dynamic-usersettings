@@ -1,4 +1,4 @@
-from models import ArbitrarySetting
+from models import UserSetting
 
 
 class SettingGateWay(object):
@@ -10,12 +10,12 @@ class SettingGateWay(object):
             return object.__getattribute__(self, k)
         except AttributeError:
             try:
-                asObject = ArbitrarySetting.objects.get(
+                asObject = UserSetting.objects.get(
                     user = self._user,
                     key=k,
                 )
                 return asObject.value
-            except ArbitrarySetting.DoesNotExist:
+            except UserSetting.DoesNotExist:
                 raise AttributeError(k)
 
     def __setattr__(self, k, v):
@@ -23,7 +23,7 @@ class SettingGateWay(object):
             object.__getattribute__(self, k)
         except AttributeError:
             if not k.startswith("_"):
-                asObject, created = ArbitrarySetting.objects.get_or_create(
+                asObject, created = UserSetting.objects.get_or_create(
                     user = self._user,
                     key = k,
                 )

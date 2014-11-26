@@ -2,7 +2,7 @@ from django.db import models
 from django.conf import settings
 
 
-class ArbitrarySetting(models.Model):
+class UserSetting(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     key = models.CharField(max_length=32)
     value = models.CharField(max_length=128)

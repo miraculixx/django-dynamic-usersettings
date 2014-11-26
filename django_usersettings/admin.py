@@ -1,17 +1,17 @@
 from django.contrib import admin
-from django_usersettings.models import ArbitrarySetting
+from django_usersettings.models import UserSetting
 
 
-class ArbitrarySettingInline(admin.TabularInline):
-    model = ArbitrarySetting
+class UserSettingInline(admin.TabularInline):
+    model = UserSetting
     extra = 3
     
 
 class UserAdmin(admin.ModelAdmin):
-    inlines = [ArbitrarySettingInline,]
+    inlines = [UserSettingInline,]
 
 
-class ArbitrarySettingAdmin(admin.ModelAdmin):
+class UserSettingAdmin(admin.ModelAdmin):
     list_display=('user', 'key', 'value')
     
-admin.site.register(ArbitrarySetting, ArbitrarySettingAdmin)
+admin.site.register(UserSetting, UserSettingAdmin)
