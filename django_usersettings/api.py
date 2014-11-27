@@ -28,11 +28,11 @@ class UserSettingResource(Resource):
     def dehydrate(self, bundle):
         user = bundle.obj._user
         for setting in UserSetting.objects.filter(user=user):
-            bundle.data[setting.field_name] = json.dumps({
+            bundle.data[setting.field_name] = {
                 'label': setting.label,
                 'type': setting.field_type,
                 'value': setting.value,
-                })
+                }
  
         return bundle
 
