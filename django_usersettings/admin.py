@@ -12,6 +12,6 @@ class UserAdmin(admin.ModelAdmin):
 
 
 class UserSettingAdmin(admin.ModelAdmin):
-    list_display=('user', 'field_name', 'value')
+    list_display=('user', 'field_name', 'label', 'value')
     
 admin.site.register(UserSetting, UserSettingAdmin)

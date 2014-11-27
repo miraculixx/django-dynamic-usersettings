@@ -5,6 +5,7 @@ from django.conf import settings
 class UserSetting(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     field_name = models.CharField(max_length=32)
+    label = models.CharField(max_length=128, blank=True, default='')
     value = models.CharField(max_length=128)
 
     def __str__(self):
