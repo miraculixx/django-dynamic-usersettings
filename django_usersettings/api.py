@@ -39,3 +39,8 @@ class UserSettingResource(Resource):
     def obj_get(self, bundle, **kwargs):
         user = get_object_or_404(get_user_model(), pk=kwargs['pk'])
         return SettingGateWay(user)
+
+    def obj_delete(self, bundle, **kwargs):
+        user = get_object_or_404(get_user_model(), pk=kwargs['pk'])
+        UserSetting.objects.filter(user=user).delete()
+
