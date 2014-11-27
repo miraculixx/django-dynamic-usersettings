@@ -3,6 +3,8 @@ import json
 from tastypie.authorization import DjangoAuthorization
 from tastypie.resources import Resource
 from tastypie.bundle import Bundle
+from tastypie.exceptions import ImmediateHttpResponse
+from tastypie.validation import Validation
 from django_usersettings.models import UserSetting
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
@@ -10,10 +12,25 @@ from django.shortcuts import get_object_or_404
 from libs import SettingGateWay
 
 
+class ValueRequiredValidation(Validation):
+    def is_valid(self, bundle, request=None):
+        if not bundle.data:
+            return {'__all__': 'Not quite what I had in mind.'}
+
+        errors = {}
+
+        for field_name in bundle.data:
+            if not "value" in bundle.data[field_name].keys():
+                errors[field_name]= "missing 'value'"
+
+        return errors
+
+
 class UserSettingResource(Resource):
     class Meta:
         resource_name = 'settings'
         authorization= DjangoAuthorization()
+        validation = ValueRequiredValidation() 
 
     def detail_uri_kwargs(self, bundle_or_obj):
         kwargs = {}
@@ -45,12 +62,9 @@ class UserSettingResource(Resource):
         UserSetting.objects.filter(user=user).delete()
 
     def obj_update(self, bundle, **kwargs):
+        self.is_valid(bundle)
         user = get_object_or_404(get_user_model(), pk=kwargs['pk'])
 
-        for field_name in bundle.data:
-            if not "value" in bundle.data[field_name].keys():
-                return {field_name, "missing 'value'"}
-                
         for field_name in bundle.data:
             content = bundle.data[field_name]
             obj, created = UserSetting.objects.get_or_create(
@@ -61,3 +75,12 @@ class UserSettingResource(Resource):
             obj.field_type = content.get('type', '')
             obj.label = content.get('label', '')
             obj.save()
+
+    def is_valid(self, bundle):
+        result = super(UserSettingResource, self).is_valid(bundle)
+        
+        if bundle.errors:
+            raise ImmediateHttpResponse(
+                response=self.error_response(bundle.request, bundle.errors))
+
+        return result
