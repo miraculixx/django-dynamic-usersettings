@@ -44,3 +44,20 @@ class UserSettingResource(Resource):
         user = get_object_or_404(get_user_model(), pk=kwargs['pk'])
         UserSetting.objects.filter(user=user).delete()
 
+    def obj_update(self, bundle, **kwargs):
+        user = get_object_or_404(get_user_model(), pk=kwargs['pk'])
+
+        for field_name in bundle.data:
+            if not "value" in bundle.data[field_name].keys():
+                return {field_name, "missing 'value'"}
+                
+        for field_name in bundle.data:
+            content = bundle.data[field_name]
+            obj, created = UserSetting.objects.get_or_create(
+                user = user,
+                field_name = field_name,
+                value = content['value'],
+                )
+            obj.field_type = content.get('type', '')
+            obj.label = content.get('label', '')
+            obj.save()
