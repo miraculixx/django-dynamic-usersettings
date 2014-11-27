@@ -12,7 +12,7 @@ class SettingGateWay(object):
             try:
                 asObject = UserSetting.objects.get(
                     user = self._user,
-                    key=k,
+                    label=k,
                 )
                 return asObject.value
             except UserSetting.DoesNotExist:
@@ -25,7 +25,7 @@ class SettingGateWay(object):
             if not k.startswith("_"):
                 asObject, created = UserSetting.objects.get_or_create(
                     user = self._user,
-                    key = k,
+                    label = k,
                 )
                 asObject.value = v
                 asObject.save()
