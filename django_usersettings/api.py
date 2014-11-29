@@ -68,7 +68,6 @@ class UserSettingResource(Resource):
         user = get_object_or_404(get_user_model(), pk=kwargs['pk'])
 
         for field_name in bundle.data:
-            print "uuu", field_name
             content = bundle.data[field_name]
             obj, created = UserSetting.objects.get_or_create(
                 user = user,
@@ -92,7 +91,6 @@ class UserSettingResource(Resource):
         user = get_object_or_404(get_user_model(), pk=kwargs['pk'])
         data = json.loads(request.body)
         for field_name in data:
-            print field_name
             content = data[field_name]
             if not isinstance(content, dict):
                 continue
