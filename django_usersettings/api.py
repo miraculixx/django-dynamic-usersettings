@@ -115,3 +115,22 @@ class UserSettingResource(Resource):
                 obj.field_type = content.get('type', '')
                 obj.label = content.get('label', '')
                 obj.save()
+
+    def obj_get_list(self, bundle, **kwargs):
+        errors = {}
+        if not hasattr(bundle.request, 'GET'):
+            errors['__all__'] = 'Getting all is not supported'
+        elif len(bundle.request.GET) == 0:
+            errors['__all__'] = 'Getting all is not supported'
+        elif len(bundle.request.GET) > 1:
+            errors['__all__'] = 'query two or more parameters is not supported'
+        else:
+            info = bundle.request.GET.items()[0]
+            matched = UserSetting.objects.filter(
+                field_name = info[0],
+                value = info[1])
+            return [SettingGateWay(x.user) for x in matched]
+
+        raise ImmediateHttpResponse(
+            response=self.error_response(bundle.request, bundle.errors))
+        
