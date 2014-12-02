@@ -37,6 +37,7 @@ class RestAPITestCase(TestCase):
         UserModel = get_user_model()
         jack = UserModel.objects.create_user("jack")
         jack.is_staff = True
+        jack.set_password('jack')
         jack.save()
 
         jack.settings.aaa = True
@@ -72,6 +73,7 @@ class RestAPITestCase(TestCase):
 
         tom = UserModel.objects.create_user("tom")
         tom.is_staff = False
+        tom.set_password('tom')
         tom.save()
         tom.settings.aaa = False
         tom.settings.bbb = "something"
@@ -207,3 +209,61 @@ class RestAPITestCase(TestCase):
             json.dumps(self.current_jack_dict),
         )
 
+    def test_api_get_list_with_search(self):
+        client = Client()
+        response = client.post(
+            "/admin/login/",
+            data = {
+                "username": "jack",
+                "password": "jack",
+                },
+        )
+        response = client.get(
+            "%s?aaa=True" % (RestAPITestCase.API_BASE,),
+            content_type='application/json',
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertJSONEqual(
+            json.dumps(self.current_jack_dict),
+            json.loads(response.content)['objects'][0],
+        )
+        
+    def test_api_get_list_with_anonymous(self):
+        client = Client()
+        response = client.get(
+            "%s?aaa=True" % (RestAPITestCase.API_BASE,),
+            content_type='application/json',
+        )
+        self.assertEqual(response.status_code, 400)
+
+    def test_api_get_list_with_non_staff(self):
+        client = Client()
+        response = client.post(
+            "/admin/login/",
+            data = {
+                "username": "tom",
+                "password": "tom",
+                },
+        )
+        response = client.get(
+            "%s?aaa=True" % (RestAPITestCase.API_BASE,),
+            content_type='application/json',
+        )
+        self.assertEqual(response.status_code, 400)
+
+    def test_api_get_list_no_search(self):
+        client = Client()
+        response = client.post(
+            "/admin/login/",
+            data = {
+                "username": "jack",
+                "password": "jack",
+                },
+        )
+        response = client.get(
+            "%s" % (RestAPITestCase.API_BASE,),
+            content_type='application/json',
+        )
+        self.assertEqual(response.status_code, 400)
+        
+        
