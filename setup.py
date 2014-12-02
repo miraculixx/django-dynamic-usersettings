@@ -17,8 +17,8 @@ setup(
     url='https://github.com/miraculixx/django-usersettings/',
     description='Generic settings and API for Django.',
     long_description=README,
-    author='Dryice Liu',
-    author_email='dryiceliu@gmail.com',
+    author='miraculixx, Dryice Liu',
+    author_email='miraculixx@gmx.ch, dryiceliu@gmail.com',
     classifiers=[
         'Environment :: Web Environment',
         'Framework :: Django',
