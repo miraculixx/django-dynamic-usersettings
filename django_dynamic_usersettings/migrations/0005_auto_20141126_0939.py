@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('django_usersettings', '0004_auto_20141125_1834'),
+        ('django_dynamic_usersettings', '0004_auto_20141125_1834'),
     ]
 
     operations = [

@@ -36,7 +36,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='arbitrarysetting',
             name='setting',
-            field=models.ForeignKey(to='django_usersettings.UserSetting'),
+            field=models.ForeignKey(to='django_dynamic_usersettings.UserSetting'),
             preserve_default=True,
         ),
     ]

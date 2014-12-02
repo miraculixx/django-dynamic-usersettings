@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django_usersettings.models import UserSetting
+from django_dynamic_usersettings.models import UserSetting
 
 
 class UserSettingInline(admin.TabularInline):

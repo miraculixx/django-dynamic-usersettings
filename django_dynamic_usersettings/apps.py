@@ -7,7 +7,7 @@ from admin import UserAdmin
 
 
 class UserSettingsConfig(AppConfig):
-    name = "django_usersettings"
+    name = "django_dynamic_usersettings"
     setting_attribute_name = "settings"
     insert_inline_editing = True
     

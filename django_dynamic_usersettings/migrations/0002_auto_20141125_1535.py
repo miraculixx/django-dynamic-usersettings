@@ -7,7 +7,7 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('django_usersettings', '0001_initial'),
+        ('django_dynamic_usersettings', '0001_initial'),
     ]
 
     operations = [

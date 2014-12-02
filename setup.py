@@ -8,9 +8,9 @@ with open(os.path.join(os.path.dirname(__file__), 'README.md')) as readme:
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
-    name='django-usersettings',
+    name='django_dynamic_usersettings',
     version='0.1',
-    packages=['django_usersettings'],
+    packages=['django_dynamic_usersettings'],
     include_package_data=True,
     install_requires = ['django-tastypie'],
     license='MIT',  

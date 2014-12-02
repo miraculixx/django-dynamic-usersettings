@@ -7,14 +7,15 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('django_usersettings', '0007_auto_20141127_0613'),
+        ('django_dynamic_usersettings', '0003_auto_20141125_1826'),
     ]
 
     operations = [
-        migrations.AddField(
+        migrations.RemoveField(
             model_name='usersetting',
-            name='label',
-            field=models.CharField(default=b'', max_length=128, blank=True),
-            preserve_default=True,
+            name='user',
+        ),
+        migrations.DeleteModel(
+            name='UserSetting',
         ),
     ]

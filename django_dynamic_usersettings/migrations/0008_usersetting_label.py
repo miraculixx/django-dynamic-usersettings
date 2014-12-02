@@ -7,14 +7,14 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('django_usersettings', '0008_usersetting_label'),
+        ('django_dynamic_usersettings', '0007_auto_20141127_0613'),
     ]
 
     operations = [
         migrations.AddField(
             model_name='usersetting',
-            name='field_type',
-            field=models.CharField(default=b'string', max_length=16, choices=[(b'string', 'string'), (b'number', 'number'), (b'bool', 'bool'), (b'json', 'json')]),
+            name='label',
+            field=models.CharField(default=b'', max_length=128, blank=True),
             preserve_default=True,
         ),
     ]

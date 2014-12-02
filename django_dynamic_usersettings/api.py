@@ -5,7 +5,7 @@ from tastypie.resources import Resource, convert_post_to_patch
 from tastypie.bundle import Bundle
 from tastypie.exceptions import ImmediateHttpResponse
 from tastypie.validation import Validation
-from django_usersettings.models import UserSetting
+from django_dynamic_usersettings.models import UserSetting
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 
