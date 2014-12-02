@@ -117,7 +117,6 @@ class UserSettingResource(Resource):
                 obj.save()
 
     def obj_get_list(self, bundle, **kwargs):
-        print bundle.request.user, bundle.request.user.is_staff
         errors = {}
         if not bundle.request.user.is_staff:
             errors['__all__'] = 'You are not allowed to access this'
