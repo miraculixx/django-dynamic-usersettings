@@ -54,5 +54,5 @@ docs/_build/
 target/
 
 # project related
-sample/db.sqlite3
-sample/django_usersettings
+samples/*/db.sqlite3
+samples/*/django_usersettings
