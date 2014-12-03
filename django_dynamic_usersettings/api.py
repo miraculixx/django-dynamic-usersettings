@@ -15,7 +15,7 @@ from models import SettingGateWay
 class ValueRequiredValidation(Validation):
     def is_valid(self, bundle, request=None):
         if not bundle.data:
-            return {'__all__': 'Not quite what I had in mind.'}
+            return {'__all__': 'Invalid Value'}
 
         errors = {}
 
