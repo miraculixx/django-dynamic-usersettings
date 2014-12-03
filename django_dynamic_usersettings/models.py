@@ -1,7 +1,8 @@
+import django
 from django.db import models
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
-
+from distutils.version import StrictVersion
 
 class UserSetting(models.Model):
     TYPE_STRING = "string"
@@ -33,4 +34,52 @@ class UserSetting(models.Model):
             self.user,
         )
         
+
+class SettingGateWay(object):
+    def __init__(self, user):
+        self._user = user
+    
+    def __getattr__(self, k):
+        try:
+            return object.__getattribute__(self, k)
+        except AttributeError:
+            try:
+                asObject = UserSetting.objects.get(
+                    user = self._user,
+                    field_name=k,
+                )
+                return asObject.value
+            except UserSetting.DoesNotExist:
+                raise AttributeError(k)
+
+    def __setattr__(self, k, v):
+        try:
+            object.__getattribute__(self, k)
+        except AttributeError:
+            if not k.startswith("_"):
+                asObject, created = UserSetting.objects.get_or_create(
+                    user = self._user,
+                    field_name = k,
+                )
+                asObject.value = v
+                asObject.save()
+            else:
+                object.__setattr__(self, k, v)
+        else:
+            object.__setattr__(self, k, v)
+
+
+
+
+class UserSettingDescriptor(object):
+    def __get__(self, instance, owner):
+        return SettingGateWay(instance)
+
+
+if StrictVersion(django.get_version()) < StrictVersion('1.7.0'):
+    from django.contrib.auth import get_user_model
+    setattr(get_user_model(),
+            "settings",
+            UserSettingDescriptor(),
+    )
 

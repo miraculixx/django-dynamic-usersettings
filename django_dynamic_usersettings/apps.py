@@ -2,7 +2,7 @@ from django.apps import AppConfig
 from django.contrib.auth import get_user_model
 from django.contrib import admin
 
-from libs import UserSettingDescriptor
+from models import UserSettingDescriptor
 from admin import UserAdmin
 
 
