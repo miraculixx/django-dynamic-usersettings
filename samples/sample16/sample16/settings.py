@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'django_dynamic_usersettings',
 
     'django_extensions',
+    'south',
 )
 
 MIDDLEWARE_CLASSES = (
