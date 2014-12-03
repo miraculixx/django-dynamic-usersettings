@@ -78,8 +78,13 @@ class UserSettingDescriptor(object):
 
 if StrictVersion(django.get_version()) < StrictVersion('1.7.0'):
     from django.contrib.auth import get_user_model
+    if hasattr(settings, 'DDU_SETTING_ATTRIBUTE_NAME'):
+        setting_attribute_name = settings.DDU_SETTING_ATTRIBUTE_NAME
+    else:
+        setting_attribute_name = "settings"
+        
     setattr(get_user_model(),
-            "settings",
+            setting_attribute_name,
             UserSettingDescriptor(),
     )
 
