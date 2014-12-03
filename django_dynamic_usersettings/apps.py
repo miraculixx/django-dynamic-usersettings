@@ -10,12 +10,13 @@ class UserSettingsConfig(AppConfig):
     name = "django_dynamic_usersettings"
     setting_attribute_name = "settings"
     insert_inline_editing = True
-    
+
     def ready(self):
-        setattr(get_user_model(),
-                UserSettingsConfig.setting_attribute_name,
-                UserSettingDescriptor(),
-            )
+        setattr(
+            get_user_model(),
+            UserSettingsConfig.setting_attribute_name,
+            UserSettingDescriptor(),
+        )
 
         if UserSettingsConfig.insert_inline_editing:
             admin.site.unregister(get_user_model())

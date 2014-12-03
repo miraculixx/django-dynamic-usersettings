@@ -3,11 +3,12 @@ from django.test import TestCase, Client
 from django.contrib.auth import get_user_model
 from models import UserSetting
 
+
 class DotNotationTestCase(TestCase):
     def setUp(self):
         UserModel = get_user_model()
         UserModel.objects.create_user("jack")
-        UserModel.objects.create_user("tom")    
+        UserModel.objects.create_user("tom")
 
     def test_get_unavailable_setting(self):
         UserModel = get_user_model()
@@ -33,6 +34,7 @@ class DotNotationTestCase(TestCase):
 
 class RestAPITestCase(TestCase):
     API_BASE = "/api/v1/settings/"
+
     def setUp(self):
         UserModel = get_user_model()
         jack = UserModel.objects.create_user("jack")
@@ -42,16 +44,16 @@ class RestAPITestCase(TestCase):
 
         jack.settings.aaa = True
         temp = UserSetting.objects.get(
-            user = jack,
-            field_name = "aaa")
+            user=jack,
+            field_name="aaa")
         temp.label = "label for aaa"
         temp.field_type = UserSetting.TYPE_BOOL
         temp.save()
 
         jack.settings.bbb = "something"
         temp = UserSetting.objects.get(
-            user = jack,
-            field_name = "bbb")
+            user=jack,
+            field_name="bbb")
         temp.label = "label for bbb"
         temp.field_type = UserSetting.TYPE_STRING
         temp.save()
@@ -87,7 +89,7 @@ class RestAPITestCase(TestCase):
         self.jerry_pk = jerry.pk
 
         self.client = Client()
-        
+
     def test_api_get_object(self):
         client = Client()
         response = client.get(
@@ -104,7 +106,7 @@ class RestAPITestCase(TestCase):
         response = client.put(
             "%s%s/" % (RestAPITestCase.API_BASE, self.jack_pk),
             content_type='application/json',
-            data = json.dumps({
+            data=json.dumps({
                 "aaa": {
                     "value": "False",
                     "label": "new label",
@@ -121,13 +123,13 @@ class RestAPITestCase(TestCase):
             response.content,
             json.dumps(self.current_jack_dict),
         )
-                             
+
     def test_api_put_insert(self):
         client = Client()
         response = client.put(
             "%s%s/" % (RestAPITestCase.API_BASE, self.jack_pk),
             content_type='application/json',
-            data = json.dumps({
+            data=json.dumps({
                 "ccc": {
                     "value": "25",
                     "label": "new setting",
@@ -152,7 +154,7 @@ class RestAPITestCase(TestCase):
         response = client.patch(
             "%s%s/" % (RestAPITestCase.API_BASE, self.jack_pk),
             content_type='application/json',
-            data = json.dumps({
+            data=json.dumps({
                 "aaa": {
                     "value": "False",
                     "label": "new label",
@@ -169,13 +171,13 @@ class RestAPITestCase(TestCase):
             response.content,
             json.dumps(self.current_jack_dict),
         )
-                             
+
     def test_api_patch_delete(self):
         client = Client()
         response = client.patch(
             "%s%s/" % (RestAPITestCase.API_BASE, self.jack_pk),
             content_type='application/json',
-            data = json.dumps({
+            data=json.dumps({
                 "aaa": {
                     "value": None,
                     "label": "new label",
@@ -191,7 +193,7 @@ class RestAPITestCase(TestCase):
             response.content,
             json.dumps(self.current_jack_dict),
         )
-                             
+
     def test_api_delete(self):
         client = Client()
         response = client.delete(
@@ -221,7 +223,7 @@ class RestAPITestCase(TestCase):
             json.dumps(self.current_jack_dict),
             json.loads(response.content)['objects'][0],
         )
-        
+
     def test_api_get_list_with_anonymous(self):
         client = Client()
         response = client.get(
@@ -234,7 +236,7 @@ class RestAPITestCase(TestCase):
         client = Client()
         response = client.post(
             "/admin/login/",
-            data = {
+            data={
                 "username": "tom",
                 "password": "tom",
                 },
@@ -249,7 +251,7 @@ class RestAPITestCase(TestCase):
         client = Client()
         response = client.post(
             "/admin/login/",
-            data = {
+            data={
                 "username": "jack",
                 "password": "jack",
                 },
@@ -259,5 +261,3 @@ class RestAPITestCase(TestCase):
             content_type='application/json',
         )
         self.assertEqual(response.status_code, 400)
-        
-        

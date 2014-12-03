@@ -22,8 +22,8 @@ class ValueRequiredValidation(Validation):
         for field_name in bundle.data:
             if not isinstance(bundle.data[field_name], dict):
                 continue
-            if not "value" in bundle.data[field_name].keys():
-                errors[field_name]= "missing 'value'"
+            if "value" not in bundle.data[field_name].keys():
+                errors[field_name] = "missing 'value'"
 
         return errors
 
@@ -31,8 +31,8 @@ class ValueRequiredValidation(Validation):
 class UserSettingResource(Resource):
     class Meta:
         resource_name = 'settings'
-        authorization= DjangoAuthorization()
-        validation = ValueRequiredValidation() 
+        authorization = DjangoAuthorization()
+        validation = ValueRequiredValidation()
 
     def detail_uri_kwargs(self, bundle_or_obj):
         kwargs = {}
@@ -43,7 +43,7 @@ class UserSettingResource(Resource):
             kwargs['pk'] = bundle_or_obj._user.pk
 
         return kwargs
-    
+
     def dehydrate(self, bundle):
         user = bundle.obj._user
         for setting in UserSetting.objects.filter(user=user):
@@ -52,7 +52,7 @@ class UserSettingResource(Resource):
                 'type': setting.field_type,
                 'value': setting.value,
                 }
- 
+
         return bundle
 
     def obj_get(self, bundle, **kwargs):
@@ -70,9 +70,9 @@ class UserSettingResource(Resource):
         for field_name in bundle.data:
             content = bundle.data[field_name]
             obj, created = UserSetting.objects.get_or_create(
-                user = user,
-                field_name = field_name,
-                value = content['value'],
+                user=user,
+                field_name=field_name,
+                value=content['value'],
                 )
             obj.field_type = content.get('type', '')
             obj.label = content.get('label', '')
@@ -80,7 +80,7 @@ class UserSettingResource(Resource):
 
     def is_valid(self, bundle):
         result = super(UserSettingResource, self).is_valid(bundle)
-        
+
         if bundle.errors:
             raise ImmediateHttpResponse(
                 response=self.error_response(bundle.request, bundle.errors))
@@ -94,12 +94,12 @@ class UserSettingResource(Resource):
             content = data[field_name]
             if not isinstance(content, dict):
                 continue
-            if not content.has_key('value') or content['value'] is None:
+            if 'value' not in content or content['value'] is None:
                 # delete the setting
                 try:
                     to_be_delete = UserSetting.objects.get(
-                        user = user,
-                        field_name = field_name,
+                        user=user,
+                        field_name=field_name,
                         )
                 except UserSetting.DoesNotExist:
                     continue
@@ -108,9 +108,9 @@ class UserSettingResource(Resource):
             else:
                 # update the setting
                 obj, created = UserSetting.objects.get_or_create(
-                    user = user,
-                    field_name = field_name,
-                    value = content['value'],
+                    user=user,
+                    field_name=field_name,
+                    value=content['value'],
                     )
                 obj.field_type = content.get('type', '')
                 obj.label = content.get('label', '')
@@ -129,10 +129,9 @@ class UserSettingResource(Resource):
         else:
             info = bundle.request.GET.items()[0]
             matched = UserSetting.objects.filter(
-                field_name = info[0],
-                value = info[1])
+                field_name=info[0],
+                value=info[1])
             return [SettingGateWay(x.user) for x in matched]
 
         raise ImmediateHttpResponse(
             response=self.error_response(bundle.request, bundle.errors))
-        
