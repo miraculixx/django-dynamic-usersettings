@@ -211,13 +211,7 @@ class RestAPITestCase(TestCase):
 
     def test_api_get_list_with_search(self):
         client = Client()
-        response = client.post(
-            "/admin/login/",
-            data = {
-                "username": "jack",
-                "password": "jack",
-                },
-        )
+        client.login(username="jack", password="jack")
         response = client.get(
             "%s?aaa=True" % (RestAPITestCase.API_BASE,),
             content_type='application/json',
