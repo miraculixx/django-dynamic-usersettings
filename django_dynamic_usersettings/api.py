@@ -1,13 +1,13 @@
 import json
 
-from tastypie.authorization import DjangoAuthorization
-from tastypie.resources import Resource, convert_post_to_patch
-from tastypie.bundle import Bundle
-from tastypie.exceptions import ImmediateHttpResponse
-from tastypie.validation import Validation
-from django_dynamic_usersettings.models import UserSetting
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
+from django_dynamic_usersettings.models import UserSetting
+from tastypie.authorization import DjangoAuthorization
+from tastypie.bundle import Bundle
+from tastypie.exceptions import ImmediateHttpResponse
+from tastypie.resources import Resource, convert_post_to_patch
+from tastypie.validation import Validation
 
 from models import SettingGateWay
 
@@ -72,10 +72,10 @@ class UserSettingResource(Resource):
             obj, created = UserSetting.objects.get_or_create(
                 user=user,
                 field_name=field_name,
-                value=content['value'],
                 )
             obj.field_type = content.get('type', '')
             obj.label = content.get('label', '')
+            obj.value = content['value']
             obj.save()
 
     def is_valid(self, bundle):
@@ -110,10 +110,10 @@ class UserSettingResource(Resource):
                 obj, created = UserSetting.objects.get_or_create(
                     user=user,
                     field_name=field_name,
-                    value=content['value'],
                     )
                 obj.field_type = content.get('type', '')
                 obj.label = content.get('label', '')
+                obj.value = content['value']
                 obj.save()
 
     def obj_get_list(self, bundle, **kwargs):

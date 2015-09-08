@@ -261,3 +261,49 @@ class RestAPITestCase(TestCase):
             content_type='application/json',
         )
         self.assertEqual(response.status_code, 400)
+        
+    def test_api_put_overwrite(self):
+        client = Client()
+        response = client.put(
+            "%s%s/" % (RestAPITestCase.API_BASE, self.jack_pk),
+            content_type='application/json',
+            data=json.dumps({
+                "aaa": {
+                    "value": "True",
+                    "label": "new label",
+                    "type": "bool",
+                    }}),
+        )
+        self.current_jack_dict['aaa']['value'] = 'True'
+        self.current_jack_dict['aaa']['label'] = 'new label'
+        response = client.get(
+            "%s%s/" % (RestAPITestCase.API_BASE, self.jack_pk),
+            content_type='application/json',
+        )
+        self.assertJSONEqual(
+            response.content,
+            json.dumps(self.current_jack_dict),
+        )
+        
+    def test_api_patch_overwrite(self):
+        client = Client()
+        response = client.patch(
+            "%s%s/" % (RestAPITestCase.API_BASE, self.jack_pk),
+            content_type='application/json',
+            data=json.dumps({
+                "aaa": {
+                    "value": "True",
+                    "label": "new label",
+                    "type": "bool",
+                    }}),
+        )
+        self.current_jack_dict['aaa']['value'] = 'True'
+        self.current_jack_dict['aaa']['label'] = 'new label'
+        response = client.get(
+            "%s%s/" % (RestAPITestCase.API_BASE, self.jack_pk),
+            content_type='application/json',
+        )
+        self.assertJSONEqual(
+            response.content,
+            json.dumps(self.current_jack_dict),
+        )
