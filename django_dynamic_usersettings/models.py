@@ -26,7 +26,9 @@ class UserSetting(models.Model):
         choices=TYPE_CHOICES,
         default=TYPE_STRING,
         )
-    value = models.CharField(max_length=128)
+    value = models.CharField(max_length=getattr(settings, 
+                                                'USERSETTING_VALUE_MAXLEN', 
+                                                4096))
 
     def __str__(self):
         return "'%s': '%s' for user %s" % (
