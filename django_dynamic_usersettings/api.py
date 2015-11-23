@@ -47,10 +47,14 @@ class UserSettingResource(Resource):
     def dehydrate(self, bundle):
         user = bundle.obj._user
         for setting in UserSetting.objects.filter(user=user):
+            try:
+                value = json.loads(setting.value)
+            except:
+                pass
             bundle.data[setting.field_name] = {
                 'label': setting.label,
                 'type': setting.field_type,
-                'value': setting.value,
+                'value': value,
                 }
 
         return bundle
@@ -66,18 +70,11 @@ class UserSettingResource(Resource):
     def obj_update(self, bundle, **kwargs):
         self.is_valid(bundle)
         user = get_object_or_404(get_user_model(), pk=kwargs['pk'])
-
+        user_settings = SettingGateWay(user)
         for field_name in bundle.data:
             content = bundle.data[field_name]
-            obj, created = UserSetting.objects.get_or_create(
-                user=user,
-                field_name=field_name,
-                )
-            obj.field_type = content.get('type', '')
-            obj.label = content.get('label', '')
-            obj.value = content['value']
-            obj.save()
-
+            setattr(user_settings, field_name, content.get('value', '')) 
+            
     def is_valid(self, bundle):
         result = super(UserSettingResource, self).is_valid(bundle)
 
@@ -90,6 +87,7 @@ class UserSettingResource(Resource):
     def patch_detail(self, request, **kwargs):
         user = get_object_or_404(get_user_model(), pk=kwargs['pk'])
         data = json.loads(request.body)
+        user_settings = SettingGateWay(user)
         for field_name in data:
             content = data[field_name]
             if not isinstance(content, dict):
@@ -106,15 +104,8 @@ class UserSettingResource(Resource):
                 else:
                     to_be_delete.delete()
             else:
-                # update the setting
-                obj, created = UserSetting.objects.get_or_create(
-                    user=user,
-                    field_name=field_name,
-                    )
-                obj.field_type = content.get('type', '')
-                obj.label = content.get('label', '')
-                obj.value = content['value']
-                obj.save()
+                setattr(user_settings, field_name, content.get('value', ''))
+                
 
     def obj_get_list(self, bundle, **kwargs):
         errors = {}
