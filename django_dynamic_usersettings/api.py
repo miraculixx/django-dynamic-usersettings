@@ -50,7 +50,7 @@ class UserSettingResource(Resource):
             try:
                 value = json.loads(setting.value)
             except:
-                pass
+                value = setting.value
             bundle.data[setting.field_name] = {
                 'label': setting.label,
                 'type': setting.field_type,
@@ -105,6 +105,7 @@ class UserSettingResource(Resource):
                     to_be_delete.delete()
             else:
                 setattr(user_settings, field_name, content.get('value', ''))
+                
                 
 
     def obj_get_list(self, bundle, **kwargs):

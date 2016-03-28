@@ -18,7 +18,7 @@ class UserSetting(models.Model):
         (TYPE_NUMBER, _("number")),
         (TYPE_BOOL, _("bool")),
         (TYPE_JSON, _("json")),
-        )
+    )
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     field_name = models.CharField(max_length=32)
@@ -27,7 +27,7 @@ class UserSetting(models.Model):
         max_length=16,
         choices=TYPE_CHOICES,
         default=TYPE_STRING,
-        )
+    )
     value = models.CharField(max_length=getattr(settings,
                                                 'USERSETTING_VALUE_MAXLEN',
                                                 4096))
@@ -38,7 +38,7 @@ class UserSetting(models.Model):
             self.value,
             self.user,
         )
-        
+
     def __unicode__(self):
         return u"'%s': '%s' for user %s" % (
             self.field_name,
@@ -48,6 +48,7 @@ class UserSetting(models.Model):
 
 
 class SettingGateWay(object):
+
     def __init__(self, user):
         self._user = user
 
@@ -77,13 +78,13 @@ class SettingGateWay(object):
                     field_name=k,
                 )
                 if isinstance(v, (list, tuple, dict)):
-                    asObject.type = UserSetting.TYPE_JSON
+                    asObject.field_type = UserSetting.TYPE_JSON
                 elif isinstance(v, int):
-                    asObject.type = UserSetting.TYPE_NUMBER
+                    asObject.field_type = UserSetting.TYPE_NUMBER
                 elif isinstance(v, bool):
-                    asObject.type = UserSetting.TYPE_BOOL
-                else: 
-                    asObject.type = UserSetting.TYPE_STRING
+                    asObject.field_type = UserSetting.TYPE_BOOL
+                else:
+                    asObject.field_type = UserSetting.TYPE_STRING
                 asObject.value = json.dumps(v)
                 if created:
                     asObject.label = k
@@ -92,15 +93,16 @@ class SettingGateWay(object):
                 raise
         else:
             object.__setattr__(self, k, v)
-            
+
     def __str__(self):
         return "%s" % list(UserSetting.objects.filter(user=self._user))
-    
+
     def __unicode__(self):
         return u"%s" % list(UserSetting.objects.filter(user=self._user))
-        
+
 
 class UserSettingDescriptor(object):
+
     def __get__(self, instance, owner):
         return SettingGateWay(instance)
 
